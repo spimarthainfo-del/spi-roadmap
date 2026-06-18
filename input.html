@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPI ロードマップ作成</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#fff; --ink:#1f2937; --sub:#6b7280; --line:#e5e7eb;
+    --accent:#4f46e5; --accent-soft:#eef2ff; --warn:#ef4444;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.6}
+  .wrap{max-width:640px;margin:0 auto;padding:16px 14px 64px}
+  .hero{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-radius:18px;
+    padding:20px 18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .hero .name{font-size:20px;font-weight:800}
+  .hero .type{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;
+    background:rgba(255,255,255,.22);padding:3px 10px;border-radius:999px}
+  .hero a{color:#fff;opacity:.9;font-size:12px;float:right;margin-top:4px}
+  .sec-title{font-size:14px;font-weight:800;margin:22px 4px 10px;display:flex;align-items:center;gap:7px}
+  .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+
+  .fld{display:block;margin-bottom:13px}
+  .fld:last-child{margin-bottom:0}
+  .fld > span{display:block;font-size:12px;font-weight:700;color:var(--sub);margin-bottom:5px}
+  .fld i{color:var(--warn);font-style:normal;font-size:11px;margin-left:5px}
+  .fld input,.fld select{width:100%;padding:11px 12px;border:1px solid var(--line);
+    border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+  .two{display:flex;gap:10px}
+  .two .fld{flex:1}
+
+  .prow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .prow .ptopics{flex:1;min-width:0;padding:10px;border:1px solid var(--line);border-radius:9px;font-size:14px;font-family:inherit}
+  .prow .pdue{width:140px;flex:none;padding:10px;border:1px solid var(--line);border-radius:9px;font-size:13px;font-family:inherit}
+  .prow .del{flex:none;width:34px;height:38px;border:1px solid var(--line);background:#fff;
+    border-radius:9px;color:var(--warn);font-weight:800;cursor:pointer}
+  .rowbtns{display:flex;gap:8px;margin-top:6px}
+  .ghost{background:var(--accent-soft);color:var(--accent);border:0;padding:7px 12px;
+    border-radius:9px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit}
+  .sec-title .ghost{margin-left:auto}
+  .hint{font-size:11.5px;color:var(--sub);margin:11px 2px 0}
+  #bulk{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:14px;
+    font-family:inherit;line-height:1.8;resize:vertical;color:var(--ink);background:#fff}
+  .or{font-size:11px;color:var(--sub);text-align:center;margin:12px 0 10px}
+  .bad{outline:2px solid var(--warn)!important;border-color:var(--warn)!important;background:#fff5f5!important}
+  .msg.err{font-size:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px;min-height:0}
+
+  .primary{display:block;width:100%;margin-top:16px;padding:15px;background:var(--accent);color:#fff;
+    border:0;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:var(--shadow)}
+  .primary:active{transform:translateY(1px)}
+  .msg{text-align:center;font-weight:700;font-size:13px;margin-top:10px;min-height:18px}
+  .msg.err{color:var(--warn)}
+
+  .srow{display:flex;justify-content:space-between;align-items:center;padding:11px 2px;border-top:1px solid var(--line);gap:8px}
+  .srow:first-child{border-top:0}
+  .srow small{color:var(--sub)}
+  .srow-act{display:flex;gap:8px;align-items:center;flex:none;flex-wrap:wrap;justify-content:flex-end}
+  .srow-act .copyshare{background:var(--accent-soft);border:0;color:var(--accent);border-radius:8px;
+    padding:6px 10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+  .srow-act a{font-weight:800;color:var(--accent);text-decoration:none;font-size:13px}
+  .srow-act .delstu{background:#fff;border:1px solid var(--line);color:var(--sub);
+    border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <a href="index.html">← 一覧へ</a>
+    <a href="guide.html" style="margin-right:12px">📖 使い方</a>
+    <div class="name">学習ロードマップ作成</div>
+    <div class="type">生徒の情報を入力</div>
+  </div>
+
+  <div class="card">
+    <label class="fld"><span>生徒名 <i>必須</i></span>
+      <input id="name" placeholder="例：山田 次郎"></label>
+    <div class="two">
+      <label class="fld"><span>学習開始日</span><input id="start" type="date"></label>
+      <label class="fld"><span>テスト本番日 <i>必須</i></span><input id="exam" type="date"></label>
+    </div>
+    <label class="fld"><span>テスト形式 <i>必須</i></span>
+      <select id="type">
+        <option value="">選択してください</option>
+        <option>テストセンター</option>
+        <option>Webテスティング</option>
+        <option>ペーパーテスト</option>
+      </select></label>
+    <label class="fld"><span>1日の学習量の目安</span>
+      <input id="load" placeholder="例：平日30分・休日2時間"></label>
+  </div>
+
+  <div class="sec-title">📋 優先順位とスケジュール
+    <button class="ghost" id="loadTpl" type="button">おすすめを読み込む</button></div>
+  <div class="card">
+    <label class="fld" style="margin-bottom:8px"><span>まとめて貼り付け（自由入力）</span>
+      <textarea id="bulk" rows="9" placeholder="・集合&#10;・損益&#10;———6月24まで&#10;・割合&#10;・表&#10;————6月30まで&#10;・推論（ここがよく出ます）&#10;————7月12まで&#10;…"></textarea></label>
+    <div class="rowbtns" style="margin-bottom:4px">
+      <button class="ghost" id="parseBulk" type="button">この内容で読み込む ↓</button>
+    </div>
+    <div class="or">▼ 下で1行ずつ微調整できます</div>
+    <div id="rows"></div>
+    <div class="rowbtns">
+      <button class="ghost" id="addRow" type="button">＋ 行を追加</button>
+      <button class="ghost" id="autoDue" type="button">締切を自動配分</button>
+    </div>
+    <p class="hint">単元はカンマ区切り。上から優先的に取り組みます。各行に中間締切を設定してください。
+      「おすすめを読み込む」でテスト形式に合った順番が自動で入ります。</p>
+  </div>
+
+  <button class="primary" id="create" type="button">ロードマップを作成して開く →</button>
+  <div class="msg" id="msg"></div>
+
+  <div class="sec-title">📱 この端末で作成済み</div>
+  <div class="card" id="saved"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const D=s=>new Date(s+"T00:00:00");
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
+const diff=(a,b)=>Math.round((b-a)/86400000);
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const md=d=>`${d.getMonth()+1}/${d.getDate()}`;
+
+$("start").value = iso(new Date());
+
+function genId(name){
+  const ascii=(name||"").replace(/[^A-Za-z0-9]/g,"").toLowerCase().slice(0,10);
+  const r=Math.random().toString(36).slice(2,8);
+  return (ascii||"stu")+"-"+r;
+}
+function loadStudents(){ try{ return JSON.parse(localStorage.getItem("spi-students")||"[]"); }catch(e){ return []; } }
+function saveStudents(a){ localStorage.setItem("spi-students", JSON.stringify(a)); }
+
+/* ===== 優先順位の行 ===== */
+function addRow(topics, due){
+  const r=document.createElement("div"); r.className="prow";
+  r.innerHTML=`<input class="ptopics" placeholder="例：集合, 損益算">
+    <input class="pdue" type="date">
+    <button class="del" type="button" title="削除">×</button>`;
+  r.querySelector(".ptopics").value=topics||"";
+  r.querySelector(".pdue").value=due||"";
+  r.querySelector(".del").onclick=()=>r.remove();
+  $("rows").appendChild(r);
+}
+function rowEls(){ return [...document.querySelectorAll(".prow")]; }
+
+$("addRow").onclick=()=>addRow("","");
+
+/* ===== 自由入力テキストの解析 ===== */
+const z2h = s => String(s).replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0));
+function parseDeadline(line, startISO){
+  const s=z2h(line);
+  let year=null; const ym=s.match(/(\d{4})\s*年/); if(ym) year=+ym[1];
+  let m=null, d=null, eom=false;
+  const mm=s.match(/(\d{1,2})\s*月/);
+  if(mm){
+    m=+mm[1]; const rest=s.slice(mm.index);
+    if(/末/.test(rest)) eom=true;
+    else { const dm=rest.match(/月\s*(\d{1,2})/); if(dm) d=+dm[1]; }
+  } else {
+    const sl=s.match(/(\d{1,2})\s*[\/／]\s*(\d{1,2})/);
+    if(sl){ m=+sl[1]; d=+sl[2]; }
+  }
+  if(m==null) return null;
+  const start = startISO ? D(startISO) : new Date();
+  if(year==null){ year=start.getFullYear(); if(m < start.getMonth()+1) year++; }   // 年跨ぎ
+  if(eom || d==null) return new Date(year, m, 0);   // 「末」or 日付未指定 → 月末
+  return new Date(year, m-1, d);
+}
+function parseBlocks(text, startISO){
+  const blocks=[]; let buf=[];
+  text.split(/\r?\n/).forEach(line=>{
+    const s=line.trim(); if(!s) return;
+    const due=parseDeadline(s, startISO);
+    if(due){ if(buf.length){ blocks.push({topics:buf.slice(), due:iso(due)}); buf=[]; } }
+    else { const name=s.replace(/^[\s・･\-–—―─ー*•·●○◦▪]+/,"").trim(); if(name) buf.push(name); }
+  });
+  if(buf.length) blocks.push({topics:buf.slice(), due:""});
+  return blocks;
+}
+function doParse(silent){
+  const blocks=parseBlocks($("bulk").value, $("start").value);
+  if(!blocks.length){ if(!silent) note("読み取れませんでした。『単元』を改行で並べ、区切りに『○月○日まで』を入れてください", true); return 0; }
+  $("rows").innerHTML="";
+  blocks.forEach(b=>addRow(b.topics.join(", "), b.due));
+  const miss=blocks.filter(b=>!b.due).length;
+  if(miss && $("exam").value) autoDue();
+  if(!silent) note(`${blocks.length}グループを読み込みました${miss?`（締切なし${miss}件は自動配分）`:""}`);
+  return blocks.length;
+}
+$("parseBulk").onclick=()=>doParse(false);
+
+$("loadTpl").onclick=()=>{
+  const t=$("type").value;
+  if(!t || !PLAN_TEMPLATES[t]){ return note("先にテスト形式を選んでください", true); }
+  $("rows").innerHTML="";
+  PLAN_TEMPLATES[t].forEach(g=>addRow(g.join(", "), ""));
+  autoDue();
+  note("おすすめの優先順位を読み込みました（締切は自由に調整できます）");
+};
+/* テスト形式を選んだ瞬間、行が空なら自動で読み込む */
+$("type").onchange=()=>{ if(rowEls().length===0) $("loadTpl").click(); };
+
+function autoDue(){
+  const exam=$("exam").value, start=$("start").value||iso(new Date());
+  const rows=rowEls(); const n=rows.length;
+  if(!n) return;
+  if(!exam){ return note("本番日を入れると締切を自動配分できます", true); }
+  const total=Math.max(n, diff(D(start), D(exam)));
+  rows.forEach((r,i)=>{ r.querySelector(".pdue").value = iso(addDays(D(start), Math.round(total*(i+1)/n))); });
+}
+$("autoDue").onclick=()=>{ autoDue(); if($("exam").value) note("締切を均等に配分しました"); };
+
+/* ===== 作成 ===== */
+function invalid(id, msg){
+  note(msg, true);
+  const el=$(id);
+  el.classList.add("bad");
+  el.scrollIntoView({block:"center", behavior:"smooth"});
+  try{ el.focus({preventScroll:true}); }catch(e){}
+  setTimeout(()=>el.classList.remove("bad"), 2500);
+}
+$("create").onclick=()=>{
+ try{
+  if($("bulk").value.trim() && rowEls().length===0) doParse(true);   // 貼り付けたまま押した場合は自動で読み込む
+
+  const name=$("name").value.trim(), exam=$("exam").value, type=$("type").value;
+  const start=$("start").value || iso(new Date());
+  const plan=rowEls().map(r=>({
+    topics:r.querySelector(".ptopics").value.split(/[,、，]/).map(s=>s.trim()).filter(Boolean),
+    due:r.querySelector(".pdue").value
+  })).filter(b=>b.topics.length && b.due);
+
+  if(!name)        return invalid("name", "生徒名を入力してください");
+  if(!exam)        return invalid("exam", "テスト本番日を入力してください");
+  if(!type)        return invalid("type", "テスト形式を選んでください");
+  if(!plan.length) return invalid("bulk", "優先順位を入力して「この内容で読み込む」を押してください（または下の表に1行以上）");
+
+  plan.sort((a,b)=>D(a.due)-D(b.due));
+  const id=genId(name);
+  const st={ id, name, examDate:exam, examType:type, startDate:start,
+    dailyLoad:$("load").value.trim()||"—", plan, seedDone:[] };
+  const arr=loadStudents().filter(s=>s.id!==id); arr.push(st); saveStudents(arr);
+  location.href="index.html?id="+encodeURIComponent(id);
+ }catch(e){ note("作成中にエラー: "+e.message, true); alert("作成中にエラーが発生しました:\n"+e.message); }
+};
+
+function note(m, err){ const e=$("msg"); e.textContent=(err?"⚠️ ":"✅ ")+m; e.className="msg"+(err?" err":""); e.scrollIntoView({block:"center"}); }
+
+/* ===== 作成済み一覧（この端末） ===== */
+function renderSaved(){
+  const arr=loadStudents();
+  if(!arr.length){ $("saved").innerHTML='<p class="hint" style="margin:0">まだありません。上のフォームで作成すると、ここに一覧表示されます。</p>'; return; }
+  $("saved").innerHTML=arr.map(s=>`<div class="srow">
+    <div><b>${s.name}</b><br><small>${s.examType}・本番 ${md(D(s.examDate))}・${s.plan.length}グループ</small></div>
+    <div class="srow-act">
+      <a href="index.html?id=${encodeURIComponent(s.id)}">開く</a>
+      <button type="button" class="copyshare" data-id="${s.id}">共有リンク</button>
+      <button type="button" class="delstu" data-id="${s.id}">削除</button>
+    </div></div>`).join("");
+  $("saved").querySelectorAll(".copyshare").forEach(b=>b.onclick=()=>{
+    const st=loadStudents().find(s=>s.id===b.dataset.id); if(!st) return;
+    const url=studentShareUrl(st);
+    const ok=()=>{ b.textContent="✓ コピー"; setTimeout(()=>{b.textContent="共有リンク";},1500); };
+    if(navigator.clipboard && location.protocol!=="file:") navigator.clipboard.writeText(url).then(ok,()=>window.prompt("コピーして生徒に送ってください", url));
+    else window.prompt("コピーして生徒に送ってください", url);
+  });
+  $("saved").querySelectorAll(".delstu").forEach(b=>b.onclick=()=>{
+    saveStudents(loadStudents().filter(s=>s.id!==b.dataset.id)); renderSaved();
+  });
+}
+renderSaved();
+</script>
+</body>
+</html>

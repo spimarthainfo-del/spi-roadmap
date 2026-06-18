@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>使い方ガイド — SPI 学習ロードマップ</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#fff; --ink:#1f2937; --sub:#6b7280; --line:#e5e7eb;
+    --accent:#4f46e5; --accent-soft:#eef2ff;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.7}
+  .wrap{max-width:640px;margin:0 auto;padding:16px 14px 64px}
+  .hero{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-radius:18px;
+    padding:20px 18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .hero .name{font-size:21px;font-weight:800}
+  .hero .type{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;
+    background:rgba(255,255,255,.22);padding:3px 10px;border-radius:999px}
+  .hero a{color:#fff;opacity:.9;font-size:12px;float:right;margin-left:12px}
+
+  .sec-title{font-size:15px;font-weight:800;margin:24px 4px 10px}
+  .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+  .lead{font-size:14px;margin:0 0 10px}
+
+  .steps{list-style:none;margin:0;padding:0}
+  .steps li{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .steps li:first-child{border-top:0}
+  .steps .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;
+    font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .steps .b{font-size:14px;font-weight:800}
+  .steps .d{font-size:13px;color:var(--sub)}
+
+  .flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:6px 0 0;font-size:13px;font-weight:700}
+  .flow .chip{padding:4px 10px;border-radius:999px;color:#fff}
+  .flow .yt{background:#ff0033} .flow .app{background:#2563eb} .flow .test{background:#f59e0b}
+  .flow .arr{color:var(--sub)}
+
+  .btn{display:inline-block;margin-top:9px;background:var(--accent);color:#fff;text-decoration:none;
+    font-weight:800;font-size:13px;padding:9px 15px;border-radius:9px}
+  code{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px;font-size:12px}
+  .note{margin-top:14px;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#7c2d12}
+  .note b{color:#9a3412}
+  .note ul{margin:6px 0 0;padding-left:18px}
+  .note li{margin:4px 0}
+  .legend{font-size:12px;color:var(--sub);text-align:center;margin-top:18px}
+  .legend a{color:var(--accent);font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <a href="index.html">← 一覧へ</a>
+    <div class="name">📖 使い方ガイド</div>
+    <div class="type">SPI 学習ロードマップ</div>
+  </div>
+
+  <!-- ===== 生徒向け ===== -->
+  <div class="sec-title">🎓 生徒のみなさんへ</div>
+  <div class="card">
+    <p class="lead">これは <b>あなた専用</b> の学習プランです。迷ったら、上から順にやればOK！</p>
+    <ol class="steps">
+      <li><span class="n">1</span><div><span class="b">「今日のやること」から始めよう</span>
+        <div class="d">大事な順に並んでいます。上から片付ければOK。</div></div></li>
+      <li><span class="n">2</span><div><span class="b">「開く」ボタンで教材へ</span>
+        <div class="d">動画や確認テストがそのまま開きます。</div></div></li>
+      <li><span class="n">3</span><div><span class="b">各単元は3ステップ</span>
+        <div class="flow"><span class="chip yt">▶️ 動画</span><span class="arr">→</span><span class="chip app">📱 アプリ</span><span class="arr">→</span><span class="chip test">📝 確認テスト</span></div>
+        <div class="d">動画でコツを掴む → アプリで練習 → 確認テストで仕上げ。</div></div></li>
+      <li><span class="n">4</span><div><span class="b">終わったらチェック ✓</span>
+        <div class="d">□ をタップすると記録され、上の進捗バーが伸びます。</div></div></li>
+      <li><span class="n">5</span><div><span class="b">「本番まで〇日」を意識</span>
+        <div class="d">ヘッダーのカウントダウンでペースを確認しよう。</div></div></li>
+      <li><span class="n">6</span><div><span class="b">わからない所は先生へ</span>
+        <div class="d">LINEなどで気軽に質問してください。</div></div></li>
+    </ol>
+  </div>
+
+  <!-- ===== 運用向け ===== -->
+  <div class="sec-title">👩‍🏫 先生・運用の方へ</div>
+  <div class="card">
+    <ol class="steps">
+      <li><span class="n">1</span><div><span class="b">生徒を作る</span>
+        <div class="d">入力画面で 生徒名・本番日・テスト形式 を入れ、優先順位を「まとめて貼り付け」→「作成」。テスト形式を選ぶと、おすすめの優先順位と締切が自動で入ります。</div>
+        <a class="btn" href="input.html">入力画面を開く →</a></div></li>
+      <li><span class="n">2</span><div><span class="b">生徒に共有する</span>
+        <div class="d">ロードマップ画面の「📤 このロードマップのリンクを生徒に共有」を押す → 出たURLをLINE等で送るだけ。生徒の端末でそのまま開けます。</div></div></li>
+      <li><span class="n">3</span><div><span class="b">教材リンクを更新する</span>
+        <div class="d"><code>data.js</code> の <code>TOPICS</code> で、各単元の動画（<code>youtube</code>）と確認テスト（<code>test</code>）のURLを変更。空にすると、その「開く」ボタンは自動で消えます。</div></div></li>
+      <li><span class="n">4</span><div><span class="b">ネットに公開する</span>
+        <div class="d"><code>spi_schedule</code> フォルダを <b>Netlify Drop</b> にドラッグ&ドロップすると公開URLが発行されます。手順の詳細は <code>README.md</code> に記載。</div></div></li>
+    </ol>
+    <div class="note">
+      <b>運用の注意</b>
+      <ul>
+        <li>共有リンクには生徒データが入っています。<b>予定を変えたらリンクを作り直して送り直し</b>てください。</li>
+        <li>進捗チェックは <b>生徒の端末内だけ</b> に保存されます（先生側には戻りません）。</li>
+        <li>確認テストのGoogle Driveは、生徒配布前に必ず <b>「閲覧者」共有</b> に（編集可のままだと生徒が書き換えできます）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="legend">技術的な手順は <a href="README.md">README.md</a> もどうぞ。</div>
+</div>
+</body>
+</html>

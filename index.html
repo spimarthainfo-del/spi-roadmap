@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPI 学習ロードマップ</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#ffffff; --ink:#1f2937; --sub:#6b7280; --line:#e5e7eb;
+    --accent:#4f46e5; --accent-soft:#eef2ff;
+    --yt:#ff0033; --line-ch:#06c755; --app:#2563eb; --test:#f59e0b;
+    --ok:#10b981; --warn:#ef4444;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:16px 14px 64px}
+  a{color:inherit}
+
+  /* ヘッダー */
+  .hero{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff;
+    border-radius:18px; padding:20px 18px; box-shadow:var(--shadow); margin-bottom:14px;
+  }
+  .hero .name{font-size:20px; font-weight:800; letter-spacing:.02em}
+  .hero .type{display:inline-block; margin-top:6px; font-size:12px; font-weight:700;
+    background:rgba(255,255,255,.22); padding:3px 10px; border-radius:999px}
+  .count{display:flex; align-items:baseline; gap:8px; margin-top:14px}
+  .count .num{font-size:40px; font-weight:900; line-height:1}
+  .count .unit{font-size:14px; opacity:.9}
+  .count .label{font-size:12px; opacity:.85; margin-left:auto; text-align:right}
+  .bar{height:8px; background:rgba(255,255,255,.25); border-radius:999px; margin-top:14px; overflow:hidden}
+  .bar > i{display:block; height:100%; background:#fff; border-radius:999px}
+  .bar-meta{display:flex; justify-content:space-between; font-size:11px; opacity:.9; margin-top:6px}
+
+  /* セクション */
+  .sec-title{font-size:14px; font-weight:800; margin:22px 4px 10px; display:flex; align-items:center; gap:7px}
+  .sec-title .pill{font-size:11px; font-weight:700; color:var(--sub); background:#fff;
+    border:1px solid var(--line); padding:1px 8px; border-radius:999px}
+
+  .card{background:var(--card); border-radius:14px; box-shadow:var(--shadow); padding:14px; margin-bottom:12px}
+
+  /* 警告 */
+  .alert{background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:12px;
+    padding:12px 14px; font-size:13px; font-weight:600; margin-bottom:12px}
+  .alert.ok{background:#ecfdf5; border-color:#a7f3d0; color:#065f46}
+
+  /* 今日のやること */
+  .today{border-left:5px solid var(--accent)}
+  .todo{display:flex; align-items:center; gap:11px; padding:11px 4px; border-top:1px solid var(--line)}
+  .todo:first-of-type{border-top:0}
+  .todo .ic{font-size:20px; width:26px; text-align:center; flex:none}
+  .todo .body{flex:1; min-width:0}
+  .todo .t1{font-weight:700; font-size:14px}
+  .todo .t2{font-size:12px; color:var(--sub); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .go{flex:none; font-size:12px; font-weight:800; color:#fff; background:var(--accent);
+    padding:7px 12px; border-radius:9px; text-decoration:none; white-space:nowrap}
+  .late{font-size:10px; font-weight:800; color:#fff; background:var(--warn); padding:1px 7px; border-radius:999px}
+  .empty{color:var(--sub); font-size:13px; padding:6px 4px}
+
+  /* チャネルバッジ */
+  .ch{font-size:10px; font-weight:800; padding:1px 8px; border-radius:999px; color:#fff}
+  .ch.yt{background:var(--yt)} .ch.line{background:var(--line-ch)}
+  .ch.app{background:var(--app)} .ch.test{background:var(--test)}
+
+  /* 今週 */
+  .day{display:flex; gap:12px; padding:10px 2px; border-top:1px solid var(--line)}
+  .day:first-child{border-top:0}
+  .day .date{flex:none; width:56px; text-align:center}
+  .day .date .d{font-size:18px; font-weight:800; line-height:1.1}
+  .day .date .w{font-size:11px; color:var(--sub)}
+  .day.todayrow .date .d{color:var(--accent)}
+  .day .items{flex:1; display:flex; flex-direction:column; gap:5px; min-width:0}
+  .mini{font-size:12.5px; display:flex; gap:7px; align-items:center}
+  .mini .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .dot.yt{background:var(--yt)} .dot.line{background:var(--line-ch)}
+  .dot.app{background:var(--app)} .dot.test{background:var(--test)}
+
+  /* ロードマップ */
+  .topic{border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px}
+  .topic.done{background:#f8fafc; opacity:.92}
+  .topic-head{display:flex; align-items:center; gap:8px; margin-bottom:8px}
+  .topic-head .name{font-weight:800; font-size:15px}
+  .topic-head .due{font-size:11px; color:var(--sub); margin-left:auto; white-space:nowrap}
+  .topic-prog{font-size:11px; font-weight:800; color:var(--ok)}
+  .step{display:flex; align-items:center; gap:10px; padding:8px 2px; border-top:1px dashed var(--line)}
+  .step input{width:20px; height:20px; flex:none; accent-color:var(--accent)}
+  .step .lab{flex:1; font-size:13px}
+  .step.checked .lab{color:var(--sub); text-decoration:line-through}
+  .step .open{font-size:11px; font-weight:800; text-decoration:none; color:var(--accent); flex:none}
+
+  /* ルール脚注 */
+  .legend{font-size:11px; color:var(--sub); margin-top:18px; text-align:center; line-height:1.9}
+  .legend b{color:var(--ink)}
+
+  /* 生徒一覧（id未指定時） */
+  .pick a{display:flex; justify-content:space-between; align-items:center; padding:14px;
+    background:#fff; border-radius:12px; box-shadow:var(--shadow); margin-bottom:10px; text-decoration:none}
+  .pick .arrow{color:var(--accent); font-weight:800}
+  .pick small{color:var(--sub)}
+
+  /* 共有ボタン */
+  .share{display:block;width:100%;margin:0 0 12px;padding:13px;border:0;border-radius:12px;
+    background:#fff;color:var(--accent);font-weight:800;font-size:14px;box-shadow:var(--shadow);
+    cursor:pointer;font-family:inherit}
+  .share:active{transform:translateY(1px)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script src="data.js"></script>
+<script>
+/* ===== ステップ定義（全単元共通の4ステップ） ===== */
+const STEPS = [
+  {key:"video",   label:"動画でコツを掴む",      ch:"YouTube",   cls:"yt",   ic:"▶️", link:"youtube"},
+  {key:"app",     label:"アプリで反復トレーニング", ch:"アプリ",    cls:"app",  ic:"📱", link:"app"},
+  {key:"test",    label:"確認テストで仕上げ",      ch:"確認テスト", cls:"test", ic:"📝", link:"test"},
+];
+
+/* ===== 日付ユーティリティ ===== */
+const WD = ["日","月","火","水","木","金","土"];
+const D = s => new Date(s+"T00:00:00");
+function today(){ const n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate()); }
+const diff = (a,b)=> Math.round((b-a)/86400000);
+const md = d => `${d.getMonth()+1}/${d.getDate()}`;
+const addDays = (d,n)=>{ const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+
+function allStudents(){
+  let extra=[]; try{ extra=JSON.parse(localStorage.getItem("spi-students")||"[]"); }catch(e){}
+  return STUDENTS.concat(extra);   // data.js の生徒 ＋ 入力画面で作った生徒
+}
+function getStudent(){
+  const h=new URLSearchParams(location.hash.replace(/^#/,""));
+  const dat=h.get("d") || new URLSearchParams(location.search).get("d");
+  if(dat){ const st=decodeStudent(dat); if(st) return st; }      // 共有リンク（データ入り）を優先
+  const id = new URLSearchParams(location.search).get("id");
+  return allStudents().find(s=>s.id===id) || null;
+}
+function isSharedView(){ return /(^|[#&?])d=/.test(location.hash) || new URLSearchParams(location.search).has("d"); }
+function copyShare(st, btn){
+  const url=studentShareUrl(st);
+  const done=()=>flash(btn,"✓ リンクをコピーしました（生徒に送ってください）");
+  if(navigator.clipboard && location.protocol!=="file:")
+    navigator.clipboard.writeText(url).then(done, ()=>window.prompt("このリンクをコピーして生徒に送ってください", url));
+  else window.prompt("このリンクをコピーして生徒に送ってください", url);
+}
+function flash(btn,t){ const o=btn.dataset.o||btn.textContent; btn.dataset.o=o; btn.textContent=t; setTimeout(()=>{btn.textContent=o;},1800); }
+function topicKey(topic){
+  const base = String(topic).replace(/[（(].*$/,"").trim();   // 「推論（…）」→「推論」
+  if(TOPICS[base]) return base;
+  if(typeof TOPIC_ALIAS!=="undefined" && TOPIC_ALIAS[base] && TOPICS[TOPIC_ALIAS[base]]) return TOPIC_ALIAS[base];
+  return null;
+}
+function getLink(topic, step){
+  if(step.link==="support") return SUPPORT_LINK;
+  const k = topicKey(topic); const t = k ? TOPICS[k] : null;
+  return (t && t[step.link]) || "#";
+}
+function stepsFor(topic){               // 動画リンクが空の単元は①動画ステップを出さない
+  const k = topicKey(topic); const t = k ? TOPICS[k] : null;
+  return STEPS.filter(s => s.key!=="video" || !t || !!t.youtube);
+}
+
+/* ===== 進捗（localStorageに保存／初回は seedDone を反映） ===== */
+function loadProgress(st){
+  const key = "spi-progress-"+st.id;
+  const raw = localStorage.getItem(key);
+  if(raw){ try{ return JSON.parse(raw); }catch(e){} }
+  const p = {}; (st.seedDone||[]).forEach(k=>p[k]=true);
+  localStorage.setItem(key, JSON.stringify(p));
+  return p;
+}
+function saveProgress(st, p){ localStorage.setItem("spi-progress-"+st.id, JSON.stringify(p)); }
+
+/* ===== スケジュール生成：各単元を4ステップに分解し開始日〜締切に均等配置 ===== */
+function buildSchedule(st){
+  let blockStart = D(st.startDate);
+  const items = [];
+  for(const block of st.plan){
+    const due = D(block.due);
+    const steps = [];
+    for(const topic of block.topics)
+      for(const step of stepsFor(topic)) steps.push({topic, step});
+    const n = steps.length;
+    const span = Math.max(1, diff(blockStart, due));   // ブロックの日数
+    steps.forEach((it,i)=>{
+      const planned = addDays(blockStart, Math.floor(i*span/n));
+      items.push({...it, due, planned, key: it.topic+"|"+it.step.key});
+    });
+    blockStart = addDays(due, 1);
+  }
+  return items;
+}
+
+/* ===== 描画 ===== */
+function render(){
+  const st = getStudent();
+  const app = document.getElementById("app");
+  if(!st){ app.innerHTML = renderPicker(); return; }
+
+  const prog = loadProgress(st);
+  const sched = buildSchedule(st).map(it=>({...it, done: !!prog[it.key]}));
+  const t = today();
+  const exam = D(st.examDate);
+  const total = sched.length, done = sched.filter(x=>x.done).length;
+  const pct = Math.round(done/total*100);
+  const lastPlanned = sched.reduce((m,x)=> x.planned>m?x.planned:m, sched[0].planned);
+  const overrun = lastPlanned > exam;
+  const daysLeft = diff(t, exam);
+
+  /* 今日やること：予定日が今日以前で未完了（＝今日の分＋遅れ） */
+  const todos = sched.filter(x=>!x.done && x.planned<=t).sort((a,b)=>a.planned-b.planned);
+  const LIM = 8;
+  const todoHTML = todos.length ? todos.slice(0,LIM).map(x=>{
+    const late = x.planned < t;
+    return `<div class="todo">
+      <div class="ic">${x.step.ic}</div>
+      <div class="body">
+        <div class="t1">${x.topic}</div>
+        <div class="t2"><span class="ch ${x.step.cls}">${x.step.ch}</span>${x.step.label}
+          ${late?`<span class="late">遅れ ${md(x.planned)}</span>`:""}</div>
+      </div>
+      ${getLink(x.topic,x.step)==="#" ? "" : `<a class="go" href="${getLink(x.topic,x.step)}" target="_blank" rel="noopener">開く</a>`}
+    </div>`;
+  }).join("") + (todos.length>LIM?`<div class="empty">ほか ${todos.length-LIM} 件…まずは上から片付けよう</div>`:"")
+   : `<div class="empty">🎉 今日のノルマは完了！この調子で進めよう。</div>`;
+
+  /* 今週：今日〜+6日の未完了を日付ごとに */
+  const weekEnd = addDays(t,6);
+  const week = sched.filter(x=>!x.done && x.planned>=t && x.planned<=weekEnd);
+  const byDay = {};
+  week.forEach(x=>{ const k=md(x.planned); (byDay[k]=byDay[k]||{date:x.planned,items:[]}).items.push(x); });
+  const days = Object.values(byDay).sort((a,b)=>a.date-b.date);
+  const weekHTML = days.length ? days.map(d=>`
+    <div class="day ${diff(t,d.date)===0?'todayrow':''}">
+      <div class="date"><div class="d">${md(d.date)}</div><div class="w">${WD[d.date.getDay()]}</div></div>
+      <div class="items">${d.items.map(x=>`<div class="mini"><span class="dot ${x.step.cls}"></span>${x.topic}・${x.step.label}</div>`).join("")}</div>
+    </div>`).join("") : `<div class="empty">今週の新規タスクはありません。</div>`;
+
+  /* ロードマップ：plan順に単元を並べ、4ステップを表示 */
+  let roadmap = "";
+  st.plan.forEach(block=>{
+    block.topics.forEach(topic=>{
+      const tSteps = stepsFor(topic);
+      const steps = tSteps.map(step=>{
+        const key = topic+"|"+step.key, ck = !!prog[key];
+        return `<label class="step ${ck?'checked':''}">
+          <input type="checkbox" data-key="${key}" ${ck?'checked':''}>
+          <span class="lab">${step.ic} ${step.label}</span>
+          <span class="ch ${step.cls}">${step.ch}</span>
+          ${getLink(topic,step)==="#" ? "" : `<a class="open" href="${getLink(topic,step)}" target="_blank" rel="noopener">開く ↗</a>`}
+        </label>`;
+      }).join("");
+      const dcnt = tSteps.filter(s=>prog[topic+"|"+s.key]).length;
+      const finished = dcnt===tSteps.length;
+      roadmap += `<div class="topic ${finished?'done':''}">
+        <div class="topic-head">
+          <span class="name">${topic}</span>
+          ${finished?'<span class="topic-prog">✓ 完了</span>':`<span class="topic-prog">${dcnt}/${tSteps.length}</span>`}
+          <span class="due">締切 ${md(D(block.due))}</span>
+        </div>${steps}</div>`;
+    });
+  });
+
+  app.innerHTML = `
+    <div class="hero">
+      <div class="name">${st.name} さんの学習ロードマップ</div>
+      <div class="type">${st.examType}</div>
+      <div class="count">
+        <span class="num">${Math.max(0,daysLeft)}</span><span class="unit">日</span>
+        <span class="label">本番 ${md(exam)}（${st.examDate.slice(0,4)}）まで<br>${st.dailyLoad}</span>
+      </div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="bar-meta"><span>進捗 ${pct}%</span><span>${done} / ${total} ステップ完了</span></div>
+    </div>
+
+    ${isSharedView() ? "" : `<button class="share" id="shareBtn">📤 このロードマップのリンクを生徒に共有</button>`}
+
+    ${overrun
+      ? `<div class="alert">⚠️ 現在の締切設定だと本番日（${md(exam)}）を過ぎます。1日の量を増やすか、単元を絞りましょう。</div>`
+      : `<div class="alert ok">✅ このペースなら本番日までに全単元を一周できます。</div>`}
+
+    <div class="sec-title">🎯 今日のやること <span class="pill">優先順</span></div>
+    <div class="card today">${todoHTML}</div>
+
+    <div class="sec-title">📅 今週の予定</div>
+    <div class="card">${weekHTML}</div>
+
+    <div class="sec-title">🗺️ 単元別ロードマップ <span class="pill">タップで完了</span></div>
+    <div class="card">${roadmap}</div>
+
+    <div class="legend">
+      各単元は <b>① ▶️動画</b> → <b>② 📱アプリ</b> → <b>③ 📝確認テスト</b> の順で進めます。<br>
+      チェックは自動保存されます（この端末・ブラウザに記録）。<br>
+      <a href="guide.html" style="color:var(--accent);font-weight:700;text-decoration:none">📖 使い方ガイド</a>
+    </div>`;
+
+  /* チェックボックス → 保存 → 再描画 */
+  app.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener("change", ()=>{
+      const p = loadProgress(st);
+      if(cb.checked) p[cb.dataset.key]=true; else delete p[cb.dataset.key];
+      saveProgress(st, p);
+      render();
+    });
+  });
+
+  const sb=document.getElementById("shareBtn");
+  if(sb) sb.onclick=()=>copyShare(st, sb);
+}
+
+/* ===== id未指定時：生徒一覧（運用者がURLを確認・共有するため） ===== */
+function renderPicker(){
+  const list = allStudents();
+  const rows = list.length ? list.map(s=>`
+    <a href="?id=${encodeURIComponent(s.id)}">
+      <span><b>${s.name}</b><br><small>${s.examType}・本番 ${md(D(s.examDate))}</small></span>
+      <span class="arrow">開く →</span>
+    </a>`).join("") : `<div class="empty" style="padding:14px 4px">まだ生徒がいません。「＋ 新規作成」から追加してください。</div>`;
+  return `<div class="hero"><div class="name">SPI 学習ロードマップ</div>
+    <div class="type">生徒を選択</div></div>
+    <div class="sec-title">👥 生徒一覧
+      <a class="pill" href="input.html" style="text-decoration:none;margin-left:auto">＋ 新規作成</a>
+      <a class="pill" href="guide.html" style="text-decoration:none">📖 使い方</a></div>
+    <div class="pick">${rows}</div>
+    <div class="legend">各生徒の個別URLは <b>?id=○○</b> です。このURLを生徒に共有してください。</div>`;
+}
+
+render();
+</script>
+</body>
+</html>
