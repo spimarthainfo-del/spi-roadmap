@@ -117,12 +117,18 @@ const STUDENTS = [
    このリンクを開けば、相手の端末にデータが無くてもロードマップが復元される。
    ===================================================================== */
 function encodeStudent(st){
-  return btoa(unescape(encodeURIComponent(JSON.stringify(st))))
-    .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");   // URLセーフ
+  var bytes=new TextEncoder().encode(JSON.stringify(st));   // UTF-8バイト列
+  var bin=""; for(var i=0;i<bytes.length;i++) bin+=String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");   // URLセーフ
 }
 function decodeStudent(s){
-  try{ s=String(s).replace(/-/g,"+").replace(/_/g,"/");
-    return JSON.parse(decodeURIComponent(escape(atob(s)))); }catch(e){ return null; }
+  try{
+    s=String(s).replace(/-/g,"+").replace(/_/g,"/");
+    while(s.length % 4) s+="=";                              // ★パディング復元（iOS Safari対策）
+    var bin=atob(s), bytes=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch(e){ return null; }
 }
 function studentShareUrl(st){
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"index.html");
