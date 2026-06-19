@@ -142,8 +142,14 @@ function getStudent(){
   return allStudents().find(s=>s.id===id) || null;
 }
 function isSharedView(){ return /(^|[#&?])d=/.test(location.hash) || new URLSearchParams(location.search).has("d"); }
+function bestShareUrl(st){
+  // サイト登録済み(data.jsのSTUDENTS)なら短い ?id= 、未登録(localStorageのみ)はデータ埋め込み #d=
+  var registered = (typeof STUDENTS!=="undefined") && STUDENTS.some(function(s){return s.id===st.id;});
+  if(registered) return location.origin+location.pathname.replace(/[^\/]*$/,"index.html")+"?id="+encodeURIComponent(st.id);
+  return studentShareUrl(st);
+}
 function copyShare(st, btn){
-  const url=studentShareUrl(st);
+  const url=bestShareUrl(st);
   const done=()=>flash(btn,"✓ リンクをコピーしました（生徒に送ってください）");
   if(navigator.clipboard && location.protocol!=="file:")
     navigator.clipboard.writeText(url).then(done, ()=>window.prompt("このリンクをコピーして生徒に送ってください", url));
