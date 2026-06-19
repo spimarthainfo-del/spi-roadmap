@@ -117,7 +117,7 @@
   <div class="card" id="saved"></div>
 </div>
 
-<script src="data.js?v=20260619135410"></script>
+<script src="data.js?v=20260619144237"></script>
 <script>
 const $=id=>document.getElementById(id);
 const D=s=>new Date(s+"T00:00:00");
@@ -264,12 +264,14 @@ function renderSaved(){
       <button type="button" class="copyshare" data-id="${s.id}">共有リンク</button>
       <button type="button" class="delstu" data-id="${s.id}">削除</button>
     </div></div>`).join("");
-  $("saved").querySelectorAll(".copyshare").forEach(b=>b.onclick=()=>{
+  $("saved").querySelectorAll(".copyshare").forEach(b=>b.onclick=async()=>{
     const st=loadStudents().find(s=>s.id===b.dataset.id); if(!st) return;
-    const url=studentShareUrl(st);
+    b.textContent="🔗 短縮中…";
+    let url=studentShareUrl(st);
+    const short=await shortenUrl(url); if(short) url=short;
     const ok=()=>{ b.textContent="✓ コピー"; setTimeout(()=>{b.textContent="共有リンク";},1500); };
     if(navigator.clipboard && location.protocol!=="file:") navigator.clipboard.writeText(url).then(ok,()=>window.prompt("コピーして生徒に送ってください", url));
-    else window.prompt("コピーして生徒に送ってください", url);
+    else { b.textContent="共有リンク"; window.prompt("コピーして生徒に送ってください", url); }
   });
   $("saved").querySelectorAll(".delstu").forEach(b=>b.onclick=()=>{
     saveStudents(loadStudents().filter(s=>s.id!==b.dataset.id)); renderSaved();

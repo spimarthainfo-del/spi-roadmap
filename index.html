@@ -102,7 +102,7 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260619135410"></script>
+<script src="data.js?v=20260619144237"></script>
 <script>
 /* ===== ステップ定義（全単元共通の4ステップ） ===== */
 const STEPS = [
@@ -137,11 +137,17 @@ function bestShareUrl(st){
   if(registered) return location.origin+location.pathname.replace(/[^\/]*$/,"index.html")+"?id="+encodeURIComponent(st.id);
   return studentShareUrl(st);
 }
-function copyShare(st, btn){
-  const url=bestShareUrl(st);
-  const done=()=>flash(btn,"✓ リンクをコピーしました（生徒に送ってください）");
+async function copyShare(st, btn){
+  let url=bestShareUrl(st);
+  if(url.indexOf("?d=")>=0){                 // 長いデータURL → TinyURLで短縮
+    const o=btn.dataset.o||btn.textContent; btn.dataset.o=o; btn.textContent="🔗 短縮リンクを作成中…";
+    const short=await shortenUrl(url);
+    btn.textContent=o;
+    if(short){ url=short; }
+    else { window.prompt("短縮できませんでした（通信をご確認ください）。このリンクをコピーして送ってください", url); return; }
+  }
   if(navigator.clipboard && location.protocol!=="file:")
-    navigator.clipboard.writeText(url).then(done, ()=>window.prompt("このリンクをコピーして生徒に送ってください", url));
+    navigator.clipboard.writeText(url).then(()=>flash(btn,"✓ 短縮リンクをコピーしました"), ()=>window.prompt("このリンクをコピーして生徒に送ってください", url));
   else window.prompt("このリンクをコピーして生徒に送ってください", url);
 }
 function flash(btn,t){ const o=btn.dataset.o||btn.textContent; btn.dataset.o=o; btn.textContent=t; setTimeout(()=>{btn.textContent=o;},1800); }

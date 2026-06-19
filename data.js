@@ -164,5 +164,13 @@ function decodeStudent(s){
 }
 function studentShareUrl(st){
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"index.html");
-  return base+"#d="+encodeStudent(st);
+  return base+"?d="+encodeStudent(st);   // ?d=（クエリ）＝短縮サービスと相性が良い。#d=の旧リンクも読めます
+}
+/* 長いURLをTinyURLで短縮（ブラウザから直接呼べる）。失敗時は null */
+async function shortenUrl(longUrl){
+  try{
+    const r=await fetch("https://tinyurl.com/api-create.php?url="+encodeURIComponent(longUrl));
+    const s=(await r.text()).trim();
+    return /^https?:\/\//.test(s) ? s : null;
+  }catch(e){ return null; }
 }
