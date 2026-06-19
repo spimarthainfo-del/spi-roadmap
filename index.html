@@ -113,7 +113,7 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260619103327"></script>
+<script src="data.js?v=20260619105341"></script>
 <script>
 /* ===== ステップ定義（全単元共通の4ステップ） ===== */
 const STEPS = [
@@ -219,23 +219,6 @@ function render(){
   const overrun = lastPlanned > exam;
   const daysLeft = diff(t, exam);
 
-  /* 今日やること：予定日が今日以前で未完了（＝今日の分＋遅れ） */
-  const todos = sched.filter(x=>!x.done && x.planned<=t).sort((a,b)=>a.planned-b.planned);
-  const LIM = 8;
-  const todoHTML = todos.length ? todos.slice(0,LIM).map(x=>{
-    const late = x.planned < t;
-    return `<div class="todo">
-      <div class="ic">${x.step.ic}</div>
-      <div class="body">
-        <div class="t1">${x.topic}</div>
-        <div class="t2"><span class="ch ${x.step.cls}">${x.step.ch}</span>${x.step.label}
-          ${late?`<span class="late">遅れ ${md(x.planned)}</span>`:""}</div>
-      </div>
-      ${getLink(x.topic,x.step)==="#" ? "" : `<a class="go" href="${getLink(x.topic,x.step)}" target="_blank" rel="noopener">開く</a>`}
-    </div>`;
-  }).join("") + (todos.length>LIM?`<div class="empty">ほか ${todos.length-LIM} 件…まずは上から片付けよう</div>`:"")
-   : `<div class="empty">🎉 今日のノルマは完了！この調子で進めよう。</div>`;
-
   /* 今週：今日〜+6日の未完了を日付ごとに */
   const weekEnd = addDays(t,6);
   const week = sched.filter(x=>!x.done && x.planned>=t && x.planned<=weekEnd);
@@ -290,9 +273,6 @@ function render(){
     ${overrun
       ? `<div class="alert">⚠️ 現在の締切設定だと本番日（${md(exam)}）を過ぎます。1日の量を増やすか、単元を絞りましょう。</div>`
       : `<div class="alert ok">✅ このペースなら本番日までに全単元を一周できます。</div>`}
-
-    <div class="sec-title">🎯 今日のやること <span class="pill">優先順</span></div>
-    <div class="card today">${todoHTML}</div>
 
     <div class="sec-title">📅 今週の予定</div>
     <div class="card">${weekHTML}</div>
