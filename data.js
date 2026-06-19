@@ -20,6 +20,7 @@ const TOPICS = {
   "集合":         { youtube:"https://youtu.be/lm9cSEJfxtg", app:"#", test:"https://drive.google.com/file/d/1JNPt-T4ENxyrQwnDU-Ia9uHdedJlpYrE/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
   "損益算":       { youtube:"https://youtu.be/OZFlIuBO2_g", app:"#", test:"https://drive.google.com/file/d/1JQrctPgsMy0rLk1WSPaYzsri0hxANCv1/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
   "割合":         { youtube:"https://youtu.be/XTSLelwhOuM", app:"#", test:"https://drive.google.com/file/d/1MLvkmiU2pOS7s9GIc0X-qtlnu5aTbL7m/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
+  "料金割引":     { youtube:"", app:"#", test:"#", min:{video:12,support:20,app:30,test:15} },  /* 教材リンク未提供。アプリのレッスン番号のみ */
   "表の読み取り": { youtube:"https://youtu.be/y3Ib8duaqVI", app:"#", test:"https://drive.google.com/file/d/1AkG_Jgq4IRQHgJw4RQxuaV6UVUtRw9Qb/view?usp=sharing", min:{video:12,support:20,app:25,test:15} },
   "場合の数":     { youtube:"https://youtu.be/kpIcFS9Kl_8", app:"#", test:"https://drive.google.com/file/d/1auZuhdecEB6H7IYNzNyby73QAIrCNqEe/view?usp=sharing", min:{video:18,support:25,app:35,test:20} },
   "重複組合せ":   { youtube:"https://youtu.be/UfbxqgPQLHM", app:"#", test:"#", min:{video:18,support:25,app:35,test:20} },  /* 確認テスト未提供 */
@@ -38,8 +39,20 @@ const TOPIC_ALIAS = {
   "損益":"損益算", "速度":"速度算", "仕事":"仕事算", "表":"表の読み取り", "表読解":"表の読み取り",
   "整数":"整数の推測", "整数推測":"整数の推測", "代金清算":"代金精算", "代金の精算":"代金精算",
   "重複組み合わせ":"重複組合せ", "重複組合わせ":"重複組合せ", "速度算応用":"速度応用",
-  "web推論":"Web推論", "WEB推論":"Web推論",
+  "web推論":"Web推論", "WEB推論":"Web推論", "Webテスト推論":"Web推論", "Webテスティング推論":"Web推論",
+  "割引":"料金割引",
 };
+
+/* 単元の「アプリのレッスン番号」。テスト形式で番号が異なる（キーはTOPICS正式名で定義） */
+const LESSON_TC  = { "集合":3, "損益算":4, "割合":5, "料金割引":6, "表の読み取り":7, "速度算":8, "仕事算":9, "場合の数":10, "確率":11, "推論":12, "代金精算":13 };
+const LESSON_WEB = { "集合":3, "損益算":4, "割合":5, "表の読み取り":6, "速度算":7, "仕事算":8, "場合の数":9, "確率":10, "推論":11, "Web推論":12, "整数の推測":13 };
+const LESSON_NO  = { "テストセンター":LESSON_TC, "ペーパーテスト":LESSON_TC, "Webテスティング":LESSON_WEB };
+function lessonNo(examType, topic){          // 略称・「(メモ)」付きでも引けるよう正規化
+  var map = LESSON_NO[examType]; if(!map) return null;
+  var base = String(topic).replace(/[（(].*$/,"").trim();
+  var key = (typeof TOPIC_ALIAS!=="undefined" && TOPIC_ALIAS[base]) ? TOPIC_ALIAS[base] : base;
+  return map[key] || map[base] || null;
+}
 
 
 /* ---------------------------------------------------------------------
