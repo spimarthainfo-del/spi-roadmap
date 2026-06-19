@@ -124,6 +124,22 @@ const STUDENTS = [
     ],
     seedDone: [],
   },
+  {
+    id: "takahashi",
+    name: "高橋大地",
+    examDate: "2026-08-15",
+    examType: "テストセンター",
+    startDate: "2026-06-19",
+    dailyLoad: "—",
+    plan: [
+      { topics:["集合","損益"],            due:"2026-06-24" },
+      { topics:["割合","表"],              due:"2026-06-30" },
+      { topics:["推論"],                   due:"2026-07-20" },
+      { topics:["場合の数","確率"],         due:"2026-07-31" },
+      { topics:["速度","仕事","代金精算"],  due:"2026-08-10" },
+    ],
+    seedDone: [],
+  },
 ];
 
 
