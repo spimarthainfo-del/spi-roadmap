@@ -179,11 +179,11 @@ function studentShareUrl(st){
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"index.html");
   return base+"?d="+encodeStudent(st);   // ?d=（クエリ）＝短縮サービスと相性が良い。#d=の旧リンクも読めます
 }
-/* 長いURLをTinyURLで短縮（ブラウザから直接呼べる）。失敗時は null */
+/* 長いURLを短縮（da.gd：中間ページなし・直接302リダイレクト・ブラウザから直接呼べる）。失敗時は null */
 async function shortenUrl(longUrl){
   try{
-    const r=await fetch("https://tinyurl.com/api-create.php?url="+encodeURIComponent(longUrl));
+    const r=await fetch("https://da.gd/s?url="+encodeURIComponent(longUrl));
     const s=(await r.text()).trim();
-    return /^https?:\/\//.test(s) ? s : null;
+    return /^https?:\/\/\S+$/.test(s) ? s : null;
   }catch(e){ return null; }
 }

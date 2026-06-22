@@ -102,7 +102,7 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260619151327"></script>
+<script src="data.js?v=20260622160914"></script>
 <script>
 /* ===== ステップ定義（全単元共通の4ステップ） ===== */
 const STEPS = [
@@ -139,7 +139,7 @@ function bestShareUrl(st){
 }
 async function copyShare(st, btn){
   let url=bestShareUrl(st);
-  if(url.indexOf("?d=")>=0){                 // 長いデータURL → TinyURLで短縮
+  if(url.indexOf("?d=")>=0){                 // 長いデータURL → 短縮(da.gd・中間ページなし)
     const o=btn.dataset.o||btn.textContent; btn.dataset.o=o; btn.textContent="🔗 短縮リンクを作成中…";
     const short=await shortenUrl(url);
     btn.textContent=o;
