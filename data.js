@@ -30,7 +30,7 @@ const TOPICS = {
   "推論":         { youtube:"https://youtu.be/49MRMpZ1Z-o", hint:"https://drive.google.com/file/d/1HujkX3FQtkgLi_cxIH-M5Sxce2jC8IR1/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1D_84bkGEKYa-i7B85_9qtBqwcibbXa3U/view?usp=sharing", min:{video:20,support:30,app:40,test:25} },
   "速度算":       { youtube:"https://youtu.be/GrI8TSZHpGw", hint:"https://drive.google.com/file/d/1_CZ8kAIwmPPgga3xO4aF26JGu39wBKvu/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1yhIYipM_l1ABwml5LSzZAVZUttkwmkPz/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
   "速度応用":     { youtube:"https://youtu.be/1NPzp2vvBfQ", app:"#", test:"https://drive.google.com/file/d/1lb4DUoQM-efofgkVoG7USVTkSCs_z64u/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
-  "仕事算":       { youtube:"https://youtu.be/FPKS9EguhDk", hint:"https://drive.google.com/file/d/1_CZ8kAIwmPPgga3xO4aF26JGu39wBKvu/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1_CamUahKsUXmR7Qm4d67P0vQBVcHenga/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },  /* hintは速度算と同一リンク(提供どおり) */
+  "仕事算":       { youtube:"https://youtu.be/FPKS9EguhDk", hint:"https://drive.google.com/file/d/1KhUGQcx8_mE3FuSe_qvK7b2KWZsV6Moq/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1_CamUahKsUXmR7Qm4d67P0vQBVcHenga/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
   "代金精算":     { youtube:"https://youtu.be/JdL65wku_qE", app:"#", test:"#", min:{video:12,support:20,app:30,test:15} },  /* 確認テスト未提供 */
   "Web推論":      { youtube:"", app:"#", test:"#", min:{video:20,support:30,app:40,test:25} },  /* 動画なし・確認テスト未提供 */
 };
