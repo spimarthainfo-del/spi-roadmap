@@ -81,6 +81,8 @@
   .step{display:flex; align-items:center; gap:10px; padding:8px 2px; border-top:1px dashed var(--line)}
   .step input{width:20px; height:20px; flex:none; accent-color:var(--accent)}
   .step .lab{flex:1; font-size:13px}
+  .step .lab .stepnote{display:block; font-size:11px; color:var(--sub); font-weight:normal; line-height:1.5}
+  .step.checked .lab .stepnote{text-decoration:line-through}
   .step.checked .lab{color:var(--sub); text-decoration:line-through}
   .step .open{font-size:11px; font-weight:800; text-decoration:none; color:var(--accent); flex:none}
 
@@ -104,12 +106,12 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260713010406"></script>
+<script src="data.js?v=20260713011701"></script>
 <script>
 /* ===== ステップ定義（単元共通。テンプレ集は hint リンクがある単元のみ表示） ===== */
 const STEPS = [
   {key:"video",   label:"動画でコツを掴む",            ch:"YouTube",   cls:"yt",   ic:"▶️", link:"youtube"},
-  {key:"hint",    label:"テンプレ集（ヒント）を使って勉強", ch:"テンプレ集", cls:"hint", ic:"📄", link:"hint"},
+  {key:"hint",    label:"テンプレ集（ヒント）を使って勉強", note:"⇒必要に応じてPDFでお手元にダウンロードしてください", ch:"テンプレ集", cls:"hint", ic:"📄", link:"hint"},
   {key:"app",     label:"アプリで反復トレーニング",       ch:"アプリ",    cls:"app",  ic:"📱", link:"app"},
   {key:"test",    label:"確認テストで仕上げ",            ch:"確認テスト", cls:"test", ic:"📝", link:"test"},
 ];
@@ -243,7 +245,7 @@ function render(){
         const label = (step.key==="app" && ln) ? `アプリレッスン${ln}で反復トレーニング` : step.label;
         return `<label class="step ${ck?'checked':''}">
           <input type="checkbox" data-key="${key}" ${ck?'checked':''}>
-          <span class="lab">${step.ic} ${label}</span>
+          <span class="lab">${step.ic} ${label}${step.note?`<span class="stepnote">${step.note}</span>`:""}</span>
           <span class="ch ${step.cls}">${step.ch}</span>
           ${getLink(topic,step)==="#" ? "" : `<a class="open" href="${getLink(topic,step)}" target="_blank" rel="noopener">開く ↗</a>`}
         </label>`;
