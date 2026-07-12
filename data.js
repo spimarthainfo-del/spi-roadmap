@@ -16,20 +16,21 @@ const SUPPORT_LINK = "https://line.me/R/ti/p/@your-line-id"; // ← 自分のLIN
      youtube … コツを掴む動画 ／ app … トレーニングアプリ ／ test … 確認テスト(10問)
    ※リンクは今はダミー（YouTubeは検索URL）。実際のURLに差し替えてください。
    --------------------------------------------------------------------- */
+/* hint = テンプレ集（ヒント）PDF。無い単元は hint 省略＝②テンプレ集ステップが自動非表示 */
 const TOPICS = {
-  "集合":         { youtube:"https://youtu.be/lm9cSEJfxtg", app:"#", test:"https://drive.google.com/file/d/1JNPt-T4ENxyrQwnDU-Ia9uHdedJlpYrE/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
-  "損益算":       { youtube:"https://youtu.be/OZFlIuBO2_g", app:"#", test:"https://drive.google.com/file/d/1JQrctPgsMy0rLk1WSPaYzsri0hxANCv1/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
-  "割合":         { youtube:"https://youtu.be/XTSLelwhOuM", app:"#", test:"https://drive.google.com/file/d/1MLvkmiU2pOS7s9GIc0X-qtlnu5aTbL7m/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
+  "集合":         { youtube:"https://youtu.be/lm9cSEJfxtg", hint:"https://drive.google.com/file/d/1wv7yhNkhyf9qogE8FmA-0eBlCT2z99iF/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1JNPt-T4ENxyrQwnDU-Ia9uHdedJlpYrE/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
+  "損益算":       { youtube:"https://youtu.be/OZFlIuBO2_g", hint:"https://drive.google.com/file/d/1NZEeSukoQSgav4guKAIuM-WEkkNh9gA-/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1JQrctPgsMy0rLk1WSPaYzsri0hxANCv1/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
+  "割合":         { youtube:"https://youtu.be/XTSLelwhOuM", hint:"https://drive.google.com/file/d/1ZyVzl4LBsCVmqggJbQx0j-23JETRW9lZ/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1MLvkmiU2pOS7s9GIc0X-qtlnu5aTbL7m/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
   "料金割引":     { youtube:"", app:"#", test:"#", min:{video:12,support:20,app:30,test:15} },  /* 教材リンク未提供。アプリのレッスン番号のみ */
   "表の読み取り": { youtube:"https://youtu.be/y3Ib8duaqVI", app:"#", test:"https://drive.google.com/file/d/1AkG_Jgq4IRQHgJw4RQxuaV6UVUtRw9Qb/view?usp=sharing", min:{video:12,support:20,app:25,test:15} },
-  "場合の数":     { youtube:"https://youtu.be/kpIcFS9Kl_8", app:"#", test:"https://drive.google.com/file/d/1auZuhdecEB6H7IYNzNyby73QAIrCNqEe/view?usp=sharing", min:{video:18,support:25,app:35,test:20} },
+  "場合の数":     { youtube:"https://youtu.be/kpIcFS9Kl_8", hint:"https://drive.google.com/file/d/1hGoU331q1xEW5BbW7kJcN9EEeMy9rh8F/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1auZuhdecEB6H7IYNzNyby73QAIrCNqEe/view?usp=sharing", min:{video:18,support:25,app:35,test:20} },
   "重複組合せ":   { youtube:"https://youtu.be/UfbxqgPQLHM", app:"#", test:"#", min:{video:18,support:25,app:35,test:20} },  /* 確認テスト未提供 */
-  "確率":         { youtube:"https://youtu.be/1DkSh0NeqaY", app:"#", test:"https://drive.google.com/file/d/1TtdDVZmPYkPfY9DFYITPkQs5h7p0m6cp/view?usp=sharing", min:{video:18,support:25,app:35,test:20} },
+  "確率":         { youtube:"https://youtu.be/1DkSh0NeqaY", hint:"https://drive.google.com/file/d/12hRq-WyX8QKd6P622fPTqvUz7or7cGVY/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1TtdDVZmPYkPfY9DFYITPkQs5h7p0m6cp/view?usp=sharing", min:{video:18,support:25,app:35,test:20} },
   "整数の推測":   { youtube:"https://youtu.be/SzKgbjw_Cd4", app:"#", test:"https://drive.google.com/file/d/1S1dxOz50tnAQgECBWhbMaFVL9IlHn9lI/view?usp=sharing", min:{video:15,support:25,app:30,test:20} },
-  "推論":         { youtube:"https://youtu.be/49MRMpZ1Z-o", app:"#", test:"https://drive.google.com/file/d/1D_84bkGEKYa-i7B85_9qtBqwcibbXa3U/view?usp=sharing", min:{video:20,support:30,app:40,test:25} },
-  "速度算":       { youtube:"https://youtu.be/GrI8TSZHpGw", app:"#", test:"https://drive.google.com/file/d/1yhIYipM_l1ABwml5LSzZAVZUttkwmkPz/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
+  "推論":         { youtube:"https://youtu.be/49MRMpZ1Z-o", hint:"https://drive.google.com/file/d/1HujkX3FQtkgLi_cxIH-M5Sxce2jC8IR1/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1D_84bkGEKYa-i7B85_9qtBqwcibbXa3U/view?usp=sharing", min:{video:20,support:30,app:40,test:25} },
+  "速度算":       { youtube:"https://youtu.be/GrI8TSZHpGw", hint:"https://drive.google.com/file/d/1_CZ8kAIwmPPgga3xO4aF26JGu39wBKvu/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1yhIYipM_l1ABwml5LSzZAVZUttkwmkPz/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
   "速度応用":     { youtube:"https://youtu.be/1NPzp2vvBfQ", app:"#", test:"https://drive.google.com/file/d/1lb4DUoQM-efofgkVoG7USVTkSCs_z64u/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
-  "仕事算":       { youtube:"https://youtu.be/FPKS9EguhDk", app:"#", test:"https://drive.google.com/file/d/1_CamUahKsUXmR7Qm4d67P0vQBVcHenga/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },
+  "仕事算":       { youtube:"https://youtu.be/FPKS9EguhDk", hint:"https://drive.google.com/file/d/1_CZ8kAIwmPPgga3xO4aF26JGu39wBKvu/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1_CamUahKsUXmR7Qm4d67P0vQBVcHenga/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },  /* hintは速度算と同一リンク(提供どおり) */
   "代金精算":     { youtube:"https://youtu.be/JdL65wku_qE", app:"#", test:"#", min:{video:12,support:20,app:30,test:15} },  /* 確認テスト未提供 */
   "Web推論":      { youtube:"", app:"#", test:"#", min:{video:20,support:30,app:40,test:25} },  /* 動画なし・確認テスト未提供 */
 };
