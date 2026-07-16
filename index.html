@@ -106,7 +106,7 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260713132054"></script>
+<script src="data.js?v=20260716122952"></script>
 <script>
 /* ===== ステップ定義（単元共通。テンプレ集は hint リンクがある単元のみ表示） ===== */
 const STEPS = [
@@ -167,11 +167,12 @@ function getLink(topic, step){
   const k = topicKey(topic); const t = k ? TOPICS[k] : null;
   return (t && t[step.link]) || "#";
 }
-function stepsFor(topic){               // 動画リンクが空→①動画なし／hintリンクが無い→②テンプレ集なし
+function stepsFor(topic){               // リンクが無いステップは非表示（動画／テンプレ集／確認テスト）
   const k = topicKey(topic); const t = k ? TOPICS[k] : null;
   return STEPS.filter(s =>
     (s.key!=="video" || !t || !!t.youtube) &&
-    (s.key!=="hint"  || (t && !!t.hint))
+    (s.key!=="hint"  || (t && !!t.hint)) &&
+    (s.key!=="test"  || !t || (t.test && t.test!=="#"))
   );
 }
 
