@@ -117,7 +117,7 @@
   <div class="card" id="saved"></div>
 </div>
 
-<script src="data.js?v=20260720110134"></script>
+<script src="data.js?v=20260720134716"></script>
 <script>
 const $=id=>document.getElementById(id);
 const D=s=>new Date(s+"T00:00:00");
@@ -263,7 +263,15 @@ function renderSaved(){
       <a href="index.html?id=${encodeURIComponent(s.id)}">開く</a>
       <button type="button" class="copyshare" data-id="${s.id}">共有リンク</button>
       <button type="button" class="delstu" data-id="${s.id}">削除</button>
-    </div></div>`).join("");
+    </div></div>`).join("")
+    + `<div class="rowbtns" style="margin-top:12px"><button type="button" class="ghost" id="bulkShare">📋 全員の共有リンクをまとめて表示</button></div>
+       <textarea id="bulkOut" rows="10" readonly style="display:none;width:100%;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:12px;font-family:inherit;line-height:1.7;color:var(--ink);background:#fff"></textarea>`;
+  $("saved").querySelector("#bulkShare").onclick=()=>{
+    const text=loadStudents().map(s=>`${s.name} さん\n${studentShareUrl(s)}`).join("\n\n");
+    const ta=$("bulkOut"); ta.style.display="block"; ta.value=text; ta.focus(); ta.select();
+    if(navigator.clipboard && location.protocol!=="file:") navigator.clipboard.writeText(text);
+    note("全員分のリンクを表示しました（コピー済み。生徒ごとに分けてLINE等で送ってください）");
+  };
   $("saved").querySelectorAll(".copyshare").forEach(b=>b.onclick=()=>{
     const st=loadStudents().find(s=>s.id===b.dataset.id); if(!st) return;
     const url=studentShareUrl(st);   // 圧縮データ入りの ?c= リンク（外部短縮サービス非依存）
