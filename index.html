@@ -106,7 +106,7 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260716122952"></script>
+<script src="data.js?v=20260720110134"></script>
 <script>
 /* ===== ステップ定義（単元共通。テンプレ集は hint リンクがある単元のみ表示） ===== */
 const STEPS = [
@@ -130,29 +130,25 @@ function allStudents(){
 }
 function getStudent(){
   const h=new URLSearchParams(location.hash.replace(/^#/,""));
-  const dat=h.get("d") || new URLSearchParams(location.search).get("d");
-  if(dat){ const st=decodeStudent(dat); if(st) return st; }      // 共有リンク（データ入り）を優先
-  const id = new URLSearchParams(location.search).get("id");
+  const q=new URLSearchParams(location.search);
+  const c=h.get("c") || q.get("c");
+  if(c){ const st=decodeStudentCompact(c); if(st) return st; }   // 共有リンクv2（圧縮）を最優先
+  const dat=h.get("d") || q.get("d");
+  if(dat){ const st=decodeStudent(dat); if(st) return st; }      // 旧形式の共有リンクも読める
+  const id = q.get("id");
   return allStudents().find(s=>s.id===id) || null;
 }
-function isSharedView(){ return /(^|[#&?])d=/.test(location.hash) || new URLSearchParams(location.search).has("d"); }
+function isSharedView(){ return /(^|[#&?])[cd]=/.test(location.hash) || new URLSearchParams(location.search).has("d") || new URLSearchParams(location.search).has("c"); }
 function bestShareUrl(st){
   // サイト登録済み(data.jsのSTUDENTS)なら短い ?id= 、未登録(localStorageのみ)はデータ埋め込み #d=
   var registered = (typeof STUDENTS!=="undefined") && STUDENTS.some(function(s){return s.id===st.id;});
   if(registered) return location.origin+location.pathname.replace(/[^\/]*$/,"index.html")+"?id="+encodeURIComponent(st.id);
   return studentShareUrl(st);
 }
-async function copyShare(st, btn){
-  let url=bestShareUrl(st);
-  if(url.indexOf("?d=")>=0){                 // 長いデータURL → 短縮(da.gd・中間ページなし)
-    const o=btn.dataset.o||btn.textContent; btn.dataset.o=o; btn.textContent="🔗 短縮リンクを作成中…";
-    const short=await shortenUrl(url);
-    btn.textContent=o;
-    if(short){ url=short; }
-    else { window.prompt("短縮できませんでした（通信をご確認ください）。このリンクをコピーして送ってください", url); return; }
-  }
+function copyShare(st, btn){
+  const url=bestShareUrl(st);   // 登録済み生徒=?id=、それ以外=?c=（圧縮データ入り）。外部短縮サービスは使わない
   if(navigator.clipboard && location.protocol!=="file:")
-    navigator.clipboard.writeText(url).then(()=>flash(btn,"✓ 短縮リンクをコピーしました"), ()=>window.prompt("このリンクをコピーして生徒に送ってください", url));
+    navigator.clipboard.writeText(url).then(()=>flash(btn,"✓ リンクをコピーしました（生徒に送ってください）"), ()=>window.prompt("このリンクをコピーして生徒に送ってください", url));
   else window.prompt("このリンクをコピーして生徒に送ってください", url);
 }
 function flash(btn,t){ const o=btn.dataset.o||btn.textContent; btn.dataset.o=o; btn.textContent=t; setTimeout(()=>{btn.textContent=o;},1800); }

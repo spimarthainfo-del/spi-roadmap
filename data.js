@@ -176,15 +176,36 @@ function decodeStudent(s){
     return JSON.parse(new TextDecoder().decode(bytes));
   }catch(e){ return null; }
 }
+/* =====================================================================
+   共有リンクv2（圧縮形式 ?c=）— 外部短縮サービス非依存
+   da.gd/TinyURL等は障害・中間ページで全リンクが死ぬ事故があったため廃止。
+   単元名を番号化した超コンパクトなデータをURLに直接載せる（約200〜300文字、
+   LINEでもそのまま送れる長さ）。旧 ?d= / #d= リンクも引き続き読める。
+   ===================================================================== */
+const SHARE_TYPES = ["テストセンター","Webテスティング","ペーパーテスト"];
+const SHARE_TOPIC_CODES = ["集合","損益算","割合","料金割引","表の読み取り","場合の数","重複組合せ","確率","整数の推測","推論","速度算","速度応用","仕事算","代金精算","Web推論"];
+const _d6  = d => String(d).replace(/-/g,"").slice(2);                       // "2026-06-21"→"260621"
+const _d10 = s => "20"+s.slice(0,2)+"-"+s.slice(2,4)+"-"+s.slice(4,6);       // 逆変換
+function encodeStudentCompact(st){
+  const code = t => { const i=SHARE_TOPIC_CODES.indexOf(t); return i>=0 ? i : String(t); };  // 正式名→番号、それ以外（略称・メモ付き）は原文のまま
+  const o = { i:st.id, n:st.name, t:Math.max(0,SHARE_TYPES.indexOf(st.examType)),
+              e:_d6(st.examDate), s:_d6(st.startDate),
+              p:(st.plan||[]).map(b=>[b.topics.map(code), _d6(b.due)]) };
+  if(st.dailyLoad && st.dailyLoad!=="—") o.l = st.dailyLoad;
+  if(st.seedDone && st.seedDone.length)  o.sd = st.seedDone;
+  return encodeStudent(o);   // UTF-8 → base64url（既存の堅牢な符号化を流用）
+}
+function decodeStudentCompact(s){
+  try{
+    const o = decodeStudent(s); if(!o || !o.n || !o.p) return null;
+    return { id:o.i||("c-"+String(s).slice(0,8)), name:o.n,
+      examDate:_d10(o.e), examType:SHARE_TYPES[o.t]||SHARE_TYPES[0],
+      startDate:_d10(o.s), dailyLoad:o.l||"—",
+      plan:o.p.map(b=>({ topics:b[0].map(x=> typeof x==="number" ? (SHARE_TOPIC_CODES[x]||String(x)) : String(x)), due:_d10(b[1]) })),
+      seedDone:o.sd||[] };
+  }catch(e){ return null; }
+}
 function studentShareUrl(st){
   const base=location.origin+location.pathname.replace(/[^\/]*$/,"index.html");
-  return base+"?d="+encodeStudent(st);   // ?d=（クエリ）＝短縮サービスと相性が良い。#d=の旧リンクも読めます
-}
-/* 長いURLを短縮（da.gd：中間ページなし・直接302リダイレクト・ブラウザから直接呼べる）。失敗時は null */
-async function shortenUrl(longUrl){
-  try{
-    const r=await fetch("https://da.gd/s?url="+encodeURIComponent(longUrl));
-    const s=(await r.text()).trim();
-    return /^https?:\/\/\S+$/.test(s) ? s : null;
-  }catch(e){ return null; }
+  return base+"?c="+encodeStudentCompact(st);
 }
