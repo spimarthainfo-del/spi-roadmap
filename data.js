@@ -16,7 +16,7 @@ const SUPPORT_LINK = "https://line.me/R/ti/p/@your-line-id"; // ← 自分のLIN
      youtube … コツを掴む動画 ／ app … トレーニングアプリ ／ test … 確認テスト(10問)
    ※リンクは今はダミー（YouTubeは検索URL）。実際のURLに差し替えてください。
    --------------------------------------------------------------------- */
-/* hint = テンプレ集（ヒント）PDF。無い単元は hint 省略＝②テンプレ集ステップが自動非表示 */
+/* hint = テンプレ集（ヒント）PDF。※現在は画面に出していません（index.html の STEPS から外し済み）。復活させるときは STEPS に hint ステップを戻す */
 const TOPICS = {
   "集合":         { youtube:"https://youtu.be/lm9cSEJfxtg", hint:"https://drive.google.com/file/d/1OmIWbtZTcrGBdDq5FgI0t5JUc1uckJCy/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1PWeH7-jrbeAGJe9WxaEU3NdklvSS-5mD/view?usp=sharing", min:{video:12,support:20,app:30,test:15} },
   "損益算":       { youtube:"https://youtu.be/OZFlIuBO2_g", hint:"https://drive.google.com/file/d/1wIbZ12ikYJ_5nwJYDoqW4hnuBoFE7tOk/view?usp=sharing", app:"#", test:"https://drive.google.com/file/d/1CGjPlvHkklzqAjXZQfC_OiX4cnLmhdrL/view?usp=sharing", min:{video:15,support:20,app:30,test:15} },

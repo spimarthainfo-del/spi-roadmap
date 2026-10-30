@@ -55,7 +55,6 @@
   .ch{font-size:10px; font-weight:800; padding:1px 8px; border-radius:999px; color:#fff}
   .ch.yt{background:var(--yt)} .ch.line{background:var(--line-ch)}
   .ch.app{background:var(--app)} .ch.test{background:var(--test)}
-  .ch.hint{background:#0d9488}
 
   /* 今週 */
   .day{display:flex; gap:12px; padding:10px 2px; border-top:1px solid var(--line)}
@@ -69,7 +68,6 @@
   .mini .dot{width:8px;height:8px;border-radius:50%;flex:none}
   .dot.yt{background:var(--yt)} .dot.line{background:var(--line-ch)}
   .dot.app{background:var(--app)} .dot.test{background:var(--test)}
-  .dot.hint{background:#0d9488}
 
   /* ロードマップ */
   .topic{border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px}
@@ -106,12 +104,11 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20261030114616"></script>
+<script src="data.js?v=20261030115041"></script>
 <script>
-/* ===== ステップ定義（単元共通。テンプレ集は hint リンクがある単元のみ表示） ===== */
+/* ===== ステップ定義（単元共通。リンクが無いステップは非表示） ===== */
 const STEPS = [
   {key:"video",   label:"動画でコツを掴む",            ch:"YouTube",   cls:"yt",   ic:"▶️", link:"youtube"},
-  {key:"hint",    label:"テンプレ集（ヒント）を使って勉強", note:"⇒必要に応じてPDFでお手元にダウンロードしてください", ch:"テンプレ集", cls:"hint", ic:"📄", link:"hint"},
   {key:"app",     label:"アプリで反復トレーニング",       ch:"アプリ",    cls:"app",  ic:"📱", link:"app"},
   {key:"test",    label:"確認テストで仕上げ",            ch:"確認テスト", cls:"test", ic:"📝", link:"test"},
 ];
@@ -167,7 +164,6 @@ function stepsFor(topic, examType){     // リンクが無いステップは非�
   const k = topicKey(topic); const t = k ? TOPICS[k] : null;
   return STEPS.filter(s =>
     (s.key!=="video" || !t || !!t.youtube) &&
-    (s.key!=="hint"  || (t && !!t.hint)) &&
     (s.key!=="test"  || (examType==="テストセンター" && (!t || (t.test && t.test!=="#"))))
   );
 }
@@ -283,7 +279,7 @@ function render(){
     <div class="card">${roadmap}</div>
 
     <div class="legend">
-      各単元は <b>① ▶️動画</b> → <b>② 📄テンプレ集</b> → <b>③ 📱アプリ</b> → <b>④ 📝確認テスト</b> の順で進めます（テンプレ集は一部の単元のみ／確認テストはテストセンターの方のみ）。<br>
+      各単元は <b>① ▶️動画</b> → <b>② 📱アプリ</b> → <b>③ 📝確認テスト</b> の順で進めます（確認テストはテストセンターの方のみ）。<br>
       チェックは自動保存されます（この端末・ブラウザに記録）。<br>
       <a href="guide.html" style="color:var(--accent);font-weight:700;text-decoration:none">📖 使い方ガイド</a>
     </div>`;
