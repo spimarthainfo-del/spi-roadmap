@@ -106,7 +106,7 @@
 <body>
 <div class="wrap" id="app"></div>
 
-<script src="data.js?v=20260721110839"></script>
+<script src="data.js?v=20261030113329"></script>
 <script>
 /* ===== ステップ定義（単元共通。テンプレ集は hint リンクがある単元のみ表示） ===== */
 const STEPS = [
@@ -163,12 +163,12 @@ function getLink(topic, step){
   const k = topicKey(topic); const t = k ? TOPICS[k] : null;
   return (t && t[step.link]) || "#";
 }
-function stepsFor(topic){               // リンクが無いステップは非表示（動画／テンプレ集／確認テスト）
+function stepsFor(topic, examType){     // リンクが無いステップは非表示。確認テストはテストセンターの生徒だけ
   const k = topicKey(topic); const t = k ? TOPICS[k] : null;
   return STEPS.filter(s =>
     (s.key!=="video" || !t || !!t.youtube) &&
     (s.key!=="hint"  || (t && !!t.hint)) &&
-    (s.key!=="test"  || !t || (t.test && t.test!=="#"))
+    (s.key!=="test"  || (examType==="テストセンター" && (!t || (t.test && t.test!=="#"))))
   );
 }
 
@@ -191,7 +191,7 @@ function buildSchedule(st){
     const due = D(block.due);
     const steps = [];
     for(const topic of block.topics)
-      for(const step of stepsFor(topic)) steps.push({topic, step});
+      for(const step of stepsFor(topic, st.examType)) steps.push({topic, step});
     const n = steps.length;
     const span = Math.max(1, diff(blockStart, due));   // ブロックの日数
     steps.forEach((it,i)=>{
@@ -235,7 +235,7 @@ function render(){
   let roadmap = "";
   st.plan.forEach(block=>{
     block.topics.forEach(topic=>{
-      const tSteps = stepsFor(topic);
+      const tSteps = stepsFor(topic, st.examType);
       const ln = lessonNo(st.examType, topic);
       const steps = tSteps.map(step=>{
         const key = topic+"|"+step.key, ck = !!prog[key];
@@ -283,7 +283,7 @@ function render(){
     <div class="card">${roadmap}</div>
 
     <div class="legend">
-      各単元は <b>① ▶️動画</b> → <b>② 📄テンプレ集</b> → <b>③ 📱アプリ</b> → <b>④ 📝確認テスト</b> の順で進めます（テンプレ集がある単元のみ②を表示）。<br>
+      各単元は <b>① ▶️動画</b> → <b>② 📄テンプレ集</b> → <b>③ 📱アプリ</b> → <b>④ 📝確認テスト</b> の順で進めます（テンプレ集は一部の単元のみ／確認テストはテストセンターの方のみ）。<br>
       チェックは自動保存されます（この端末・ブラウザに記録）。<br>
       <a href="guide.html" style="color:var(--accent);font-weight:700;text-decoration:none">📖 使い方ガイド</a>
     </div>`;
